@@ -7,7 +7,7 @@ import java.util.*;
 
 public class ProductDAO {
     public void insertProduct(Product product){
-        String sql = "insert into products(name,quantity,reorder_level) values ?,?,?";
+        String sql = "insert into products(name,quantity,reorder_level) values(?,?,?)";
 
         try(Connection  conn = DBUtil.getConnection();
         PreparedStatement ps = conn.prepareStatement(sql)){

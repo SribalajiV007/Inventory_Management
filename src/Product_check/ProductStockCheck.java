@@ -5,6 +5,7 @@ import java.util.*;
 public class ProductStockCheck {
    public static void main(String[]args){
        Scanner s = new Scanner(System.in);
+       ProductDAO dao = new ProductDAO();
 
        List<Product> ProductList = new ArrayList<>();
 
@@ -23,7 +24,9 @@ public class ProductStockCheck {
            int reorder = s.nextInt();
            s.nextLine();                // ➌ clear newline after the two ints
 
-           ProductList.add(new Product(name, quantity, reorder));
+           Product p = new Product(name, quantity, reorder);
+           ProductList.add(p);
+           dao.insertProduct(p);
        }
 
        System.out.println("\n--- Available Products ---");
