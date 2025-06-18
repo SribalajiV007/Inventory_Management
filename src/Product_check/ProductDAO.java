@@ -6,6 +6,8 @@ import java.sql.*;
 import java.util.*;
 
 public class ProductDAO {
+
+    // Insertproduct
     public void insertProduct(Product product){
         String sql = "insert into products(name,quantity,reorder_level) values(?,?,?)";
 
@@ -21,6 +23,7 @@ public class ProductDAO {
         }
     }
 
+    // --- get all products
     public List<Product> getAllProducts(){
         List<Product> list = new ArrayList();
 
@@ -34,11 +37,39 @@ public class ProductDAO {
                 int quantity = rs.getInt("quantity");
                 int reorder = rs.getInt("reorder_level");
             }
-
-
         }catch (SQLException e){
             e.printStackTrace();
         }
         return list;
+    }
+
+    // Update Product
+
+    public boolean updateProduct(String name, int newQty, int newReorder){
+        String sql = "update products SET quantity = ?, reorder_level =? where name = ?";
+        try(Connection conn = DBUtil.getConnection();
+        PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1,newQty);
+            ps.setInt(2, newReorder);
+            ps.setString(3, name);
+             return ps.executeUpdate() > 0;
+        }catch(SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // Delete Product
+    public boolean deleteProduct(String name){
+        String sql = "delete from products where name = ?";
+        try(Connection conn = DBUtil.getConnection();
+        PreparedStatement ps = conn.prepareStatement(sql)){
+
+            ps.setString(1, name);
+            return ps.executeUpdate() > 0;
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
     }
 }

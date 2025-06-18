@@ -3,9 +3,12 @@ package Product_check;
 import java.util.*;
 
 public class ProductStockCheck {
+
+    private static final Scanner s = new Scanner(System.in);
+    private static final ProductDAO dao = new ProductDAO();
+
    public static void main(String[]args){
-       Scanner s = new Scanner(System.in);
-       ProductDAO dao = new ProductDAO();
+
 
        List<Product> ProductList = new ArrayList<>();
 

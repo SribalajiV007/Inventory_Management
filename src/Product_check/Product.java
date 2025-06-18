@@ -1,9 +1,9 @@
 package Product_check;
 
 public class Product {
-    String name;
-    int quantity;
-    int reorder;
+    private String name;
+    private int quantity;
+    private int reorder;
 
     public Product(String name, int quantity ,int reorder){
         this.name = name;
@@ -23,12 +23,15 @@ public class Product {
         return reorder;
     }
 
-    boolean isStockAvailable(){
+    public boolean isStockAvailable(){
         return quantity>reorder;
     }
 
-    public String toString(){
-        return "Product_name: "+name+" Quantity: "+quantity+" Reorder Level: "+reorder;
+    @Override
+    public String toString() {
+        return "Product_name: " + name +
+                " Quantity: "    + quantity +
+                " Reorder Level: " + reorder;
     }
 }
 

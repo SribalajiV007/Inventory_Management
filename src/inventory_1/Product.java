@@ -17,9 +17,6 @@ class Product {
 
     @Override
     public String toString() {
-        return String.format(
-                "Product Name: %s, Quantity: %d, Re‑order Level: %d",
-                name, quantity, reorderLevel
-        );
+        return String.format("Product Name: %s, Quantity: %d, Re‑order Level: %d", name, quantity, reorderLevel);
     }
 }
