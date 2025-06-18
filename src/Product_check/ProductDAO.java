@@ -32,10 +32,12 @@ public class ProductDAO {
         try(Connection conn = DBUtil.getConnection();
         Statement st = conn.createStatement();
         ResultSet rs =st.executeQuery(sql)){
-            while(rs.next()){
+            while(rs.next()) {
                 String name = rs.getString("name");
                 int quantity = rs.getInt("quantity");
                 int reorder = rs.getInt("reorder_level");
+
+                list.add(new Product(name, quantity, reorder));
             }
         }catch (SQLException e){
             e.printStackTrace();
@@ -70,6 +72,7 @@ public class ProductDAO {
             return ps.executeUpdate() > 0;
         }catch(SQLException e){
             e.printStackTrace();
+            return false;
         }
     }
 }

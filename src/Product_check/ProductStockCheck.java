@@ -1,50 +1,74 @@
 package Product_check;
 
+import Database.DBUtil;
+import java.sql.*;
 import java.util.*;
 
 public class ProductStockCheck {
-
     private static final Scanner s = new Scanner(System.in);
     private static final ProductDAO dao = new ProductDAO();
 
-   public static void main(String[]args){
+    public static void main(String[] args) {
+        while (true) {
+            System.out.print("""
+                    
+                    ===Smart WareHouse ====
+                    1.Add product.
+                    2.View all Products.
+                    3.Update Product.
+                    4.Delete Product.
+                    5.Exit.
+                    
+                    Choose: """);
+            int ch = s.nextInt();
+            s.nextLine();
+
+            switch (ch) {
+                case 1 -> addProduct();
+                case 2 -> showProducts();
+                case 3 -> updateProduct();
+                case 4 -> deleteProduct();
+                case 5 -> {
+                    s.close();
+                    return;
+                }
+                default -> System.out.println("Invalid choice!");
+            }
+        }
+    }
+
+    private static void addProduct() {
+        System.out.print("Name : ");
+        String name = s.nextLine();
+
+        System.out.print("Qty  : ");
+        int q = s.nextInt();
+
+        System.out.print("ReLvl: ");
+        int r = s.nextInt();
+        s.nextLine();
+
+        dao.insertProduct(new Product(name, q, r));
+        System.out.println("Product Added Succesfully");
+    }
 
 
-       List<Product> ProductList = new ArrayList<>();
 
-       System.out.print("Enter number of products: ");
-       int n = s.nextInt();
-       s.nextLine();                    // ➊ clear the newline AFTER reading n
+    private static void updateProduct(){
+        System.out.print("Product name to update: ");
+        String name = s.nextLine();
 
-       for (int i = 1; i <= n; i++) {
-           System.out.printf("product %d - Enter name: ", i);
-           String name = s.nextLine();  // ➋ read the full line ONCE
+        System.out.print("New Quantity :  "); int qty = s.nextInt();
+        System.out.print("New Reorder Level  :  "); int rl = s.nextInt(); s.nextLine();
 
-           System.out.printf("product %d - Enter Quantity(in Kg's): ", i);
-           int quantity = s.nextInt();
+        boolean ok = dao.updateProduct(name,qty,rl);
+        System.out.println(ok ? "Updated Succesfully." : "Product not found");
+    }
 
-           System.out.printf("product %d - Enter Reorder Level: ", i);
-           int reorder = s.nextInt();
-           s.nextLine();                // ➌ clear newline after the two ints
-
-           Product p = new Product(name, quantity, reorder);
-           ProductList.add(p);
-           dao.insertProduct(p);
-       }
-
-       System.out.println("\n--- Available Products ---");
-       for (Product p : ProductList) {
-           if (p.isStockAvailable()) {
-               System.out.println(p);
-           }
-       }
-
-       System.out.println("\n--- Out of Stock or Below Reorder Level ---");
-       for (Product p : ProductList) {
-           if (!p.isStockAvailable()) {
-               System.out.println("Product_name: " +p.getName() + " is below reorder level (OUT OF STOCK)");
-           }
-       }
-       s.close();
-   }
+    private static void deleteProduct(){
+        System.out.println("Product name to delete: ");
+        String name = s.nextLine();
+        boolean ok = dao.deleteProduct(name);
+        System.out.println(ok ? "→ Deleted." : "Product not found.");
+    }
 }
