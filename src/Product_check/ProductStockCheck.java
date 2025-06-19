@@ -17,7 +17,8 @@ public class ProductStockCheck {
                     2.View all Products.
                     3.Update Product.
                     4.Delete Product.
-                    5.Exit.
+                    5.Total Count of products in Warehouse.
+                    6.Exit.
                     
                     Choose: """);
             int ch = s.nextInt();
@@ -28,7 +29,8 @@ public class ProductStockCheck {
                 case 2 -> showProducts();
                 case 3 -> updateProduct();
                 case 4 -> deleteProduct();
-                case 5 -> {
+                case 5 -> showProductCount();
+                case 6 ->{
                     s.close();
                     return;
                 }
@@ -52,23 +54,48 @@ public class ProductStockCheck {
         System.out.println("Product Added Succesfully");
     }
 
+    private static void showProducts() {
+        List<Product> all = dao.getAllProducts();
 
+        System.out.println("\n--- Available Products ---");
+        for (Product p : all) {
+            if (p.isStockAvailable()) {
+                System.out.println(p);
+            }
+        }
+
+        System.out.println("\n--- Out of Stock or Below Reorder Level ---");
+        for (Product p : all) {
+            if (!p.isStockAvailable()) {
+                System.out.println("Product_name: " + p.getName() + " is below reorder level (OUT OF STOCK)");
+            }
+        }
+    }
 
     private static void updateProduct(){
-        System.out.print("Product name to update: ");
-        String name = s.nextLine();
+        System.out.print("Enter Product_Id to update: ");
+        int pid = s.nextInt();
+
+        System.out.print("New Product Name: ");
+        String newName = s.nextLine();
 
         System.out.print("New Quantity :  "); int qty = s.nextInt();
         System.out.print("New Reorder Level  :  "); int rl = s.nextInt(); s.nextLine();
 
-        boolean ok = dao.updateProduct(name,qty,rl);
+        boolean ok = dao.updateProduct(pid,newName,qty,rl);
         System.out.println(ok ? "Updated Succesfully." : "Product not found");
     }
 
     private static void deleteProduct(){
-        System.out.println("Product name to delete: ");
-        String name = s.nextLine();
-        boolean ok = dao.deleteProduct(name);
+        System.out.println("Product Id to delete: ");
+        int pid = s.nextInt();
+        boolean ok = dao.deleteProduct(pid);
         System.out.println(ok ? "→ Deleted." : "Product not found.");
     }
+
+    private static void showProductCount() {
+        int count = dao.getProductCount();
+        System.out.println("📦 Total Products in Warehouse: " + count);
+    }
+
 }
